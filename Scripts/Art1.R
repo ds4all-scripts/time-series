@@ -273,3 +273,12 @@ b = tapply(mc[mc$Year == 2011 &
 a = rbind(ifelse(is.logical(a),NA, a),
   ifelse(is.logical(b), NA, b))
 
+mc.q$type = "mc"
+stx.q$type = "stx"
+cyn.q$type = "cyn"
+
+toxins = rbind(mc.q, stx.q, cyn.q)
+
+write.csv(toxins,file = "Datasets/AllToxins.csv",
+          row.names =F,
+          col.names = T)
