@@ -17,8 +17,9 @@ library(cowplot)
 library(randomForest)
 library(readxl)
 
-Local = "~/Projects/R/time-series"
-setwd(Local)
+#Local = "~/Projects/R/time-series"
+local = "D:/Documents/Projects/time-series"
+
 
 
 # Datasets ----------------------------------------------------------------
@@ -226,7 +227,10 @@ for (y in unique(cyn$Year)) {
                                  "01",
                                  sep = "-"),
                    "Tox" = ifelse(is.logical(a),
-                                  NA,a)
+
+
+
+                                                            NA,a)
     )
     d = data.frame("Date"= str_c(y,
                                  m,
@@ -275,7 +279,7 @@ a = ggplot(toxins, aes(x = as.Date(Date),y = Tox, group = type)) +
   scale_x_date(limits = c(start_Date, end_Date))+
   geom_hline(yintercept =1, linetype = 2)+
   theme_cowplot()+
-  theme(legend.title=element_text(family="Times",size=20),
+  theme(legend.title=element_blank(),#element_text(family="Times",size=20),
         legend.text=element_text(family="Times",face = "italic",size=15),
         plot.title=element_text(family="Times", face="bold", size=20),
         axis.title.x=element_text(family="Times", face="bold", size=12),
@@ -338,7 +342,7 @@ plot_grid(a,b,nrow = 1, labels = "AUTO")
 
 
 
-# Decomposição  -----------------------------------------------------------
+# Decomposition  -----------------------------------------------------------
 
 # Suavizacao exponencial sazonal de Holt-Winters
 
@@ -427,6 +431,22 @@ autoplot(Turb) +
 
   guides(colour=guide_legend(title="Modelos de Holt-Winters"))
 
+
+
+
+# Prophet test ------------------------------------------------------------
+
+#install.packages('prophet')
+library(prophet)
+df1 <- read.csv('https://github.com/gumdropsteve/datasets/raw/master/views.csv')
+
+str(df)
+
+df = toxins[toxins$type =="mc",1:2]
+colnames(df) = c('ds', 'y')
+
+m <- prophet(df)
+future <- make_future_dataframe(m, periods=365)
 
 # # Drafting  -------------------------------------------------------------
 
